@@ -58,21 +58,9 @@ class PurchaseRequisition(models.Model):
                     'proposed_uom_id': pr_bid_line.product_uom.id,
                     'selected_bid_line_id': pr_bid_line.id,
                     'unit_cost': price,
-                    #FIXME: we need to take care of the scheduled date
-                    # set eta or etd depending if transport is included
+                    'date_etd': pr_bid_line.date_planned,
+                    'date_eta': pr_bid_line.date_planned,
                     }
-                if source.transport_applicable:
-                    if pr_bid_line.order_id.transport == 'included':
-                        vals.update({'date_etd': False,
-                                     'date_eta': pr_bid_line.date_planned,
-                                     })
-                    else:
-                        vals.update({'date_etd': pr_bid_line.date_planned,
-                                     'date_eta': False,
-                                     })
-                else:
-                    vals.update({'date_etd': pr_bid_line.date_planned,
-                                 'date_eta': pr_bid_line.date_planned,
                                  })
                 if not pr_bid_line.lr_source_line_id:
                     if (not pr_bid_line.quantity_bid
